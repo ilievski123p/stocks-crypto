@@ -1,20 +1,20 @@
 <template>
     <div>
-        <div class="banner-text">
+        <div>
             <transition :name="routerTransition">
                 <router-view :key="$route.path"/>
             </transition>
         </div>
         <div class="animation-area">
-		<ul class="box-area">
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-			<li></li>
-		</ul>
-	</div>
+			<ul class="box-area">
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+		</div>
     </div>
 </template>
 <script>
@@ -32,12 +32,10 @@ export default {
 	margin: 0;
 	padding: 0;
 }
-body {
-	font-family: 'Baloo 2', cursive;
-}
+
 .banner-text {
 	width: 100%;
-	z-index: 1;
+	z-index: -20;
 }
 .banner-text ul {
 	height: 50px;
@@ -65,12 +63,11 @@ body {
 	height: 100vh;
 }
 .box-area {
-	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
+	
 }
 .box-area li {
 	position: absolute;
