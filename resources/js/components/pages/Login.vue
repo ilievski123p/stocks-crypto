@@ -18,7 +18,7 @@
                     <div style="margin-top:6%; font-size:16px;" class=" font-weight-bold text-capitalize">Enter your password:</div>
                     <vs-input icon-no-border label-placeholder="Password" required v-model="password" type="password" icon="password" style="width:65%;"/>
                 </vs-row>
-                <div class="float-right mt-2">
+                <div class="float-right mt-2 flex justify-end">
                     <vs-button type="gradient" @click="login" color="primary">Sign in!</vs-button>
                 </div>
 
@@ -52,6 +52,7 @@ export default {
                 if (response.data.success)
                 {
                     window.localStorage.setItem('logged', this.email)
+                    window.localStorage.setItem('user', response.data.user)
                     this.$router.push({name: 'stocks'})
                 }
                 else{

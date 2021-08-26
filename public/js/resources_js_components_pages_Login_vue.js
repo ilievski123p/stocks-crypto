@@ -69,6 +69,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         if (response.data.success) {
           window.localStorage.setItem('logged', _this.email);
+          window.localStorage.setItem('user', response.data.user);
 
           _this.$router.push({
             name: 'stocks'
@@ -351,7 +352,7 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "div",
-                      { staticClass: "float-right mt-2" },
+                      { staticClass: "float-right mt-2 flex justify-end" },
                       [
                         _c(
                           "vs-button",

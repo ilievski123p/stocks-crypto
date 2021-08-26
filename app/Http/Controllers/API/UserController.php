@@ -52,8 +52,7 @@ class UserController extends Controller
         if (Auth::attempt($credentials)) {
             $success = true;
             $message = 'User login successfully';
-            Storage::disk('local')->put('logged', $request->email);
-
+            $user = Auth::user()->name;
         } else {
             $success = false;
             $message = 'Unauthorised';
@@ -63,6 +62,7 @@ class UserController extends Controller
         $response = [
             'success' => $success,
             'message' => $message,
+            'user'    => $user
         ];
         return response()->json($response);
     }

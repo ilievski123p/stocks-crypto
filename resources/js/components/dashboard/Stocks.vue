@@ -41,8 +41,7 @@
         </vs-tr>
       </template>
     </vs-table> -->
-    <vs-button @click="logout">
-      KOPCE </vs-button>
+    HEllo homepage
   </div>
 </template>
 
@@ -51,10 +50,7 @@ import router from 'vue-router'
 export default {
  
   methods:{
-    logout(){
-      window.localStorage.removeItem("logged");
-      this.$router.push({name: 'login'})
-    }
+   
   }
 }
 </script>
