@@ -11,20 +11,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -59,8 +47,71 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  methods: {}
+  data: function data() {
+    return {
+      locales: [],
+      locale: 'G',
+      fields: ['T', 'c', 'h', "l", "o", 't', "v", 'Favorite'],
+      items: [],
+      perPage: 10,
+      currentPage: 1,
+      isBusy: true,
+      favorites: []
+    };
+  },
+  watch: {
+    locale: function locale(newVal) {
+      this.getStocks(newVal);
+    }
+  },
+  mounted: function mounted() {
+    this.getStocks(this.locale);
+  },
+  methods: {
+    getStocks: function getStocks(locale) {
+      var _this = this;
+
+      this.$vs.loading();
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post('api/getStocks', {
+        market: locale
+      }).then(function (response) {
+        _this.items = response.data.results;
+        _this.isBusy = false;
+
+        _this.$vs.loading.close();
+      });
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get('api/getFavorites').then(function (response) {
+        _this.favorites = response.data;
+
+        _this.$vs.loading.close();
+      });
+    },
+    addToFavorites: function addToFavorites(row) {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post('api/addToFavorites', {
+        stock: row.item,
+        type: 'stocks'
+      }).then(function (response) {
+        if (response.data) {
+          _this2.$vs.notify({
+            title: 'Success',
+            text: 'The stock has been added to your favorites!',
+            color: 'success'
+          });
+
+          _this2.getStocks();
+        }
+      });
+    }
+  },
+  computed: {
+    rows: function rows() {
+      return this.items.length;
+    }
+  }
 });
 
 /***/ }),
@@ -149,7 +200,72 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n  HEllo homepage\n")])
+  return _c("div", [
+    _c(
+      "div",
+      { staticClass: "m-4 flex justify-center" },
+      [
+        _c("b-table", {
+          attrs: {
+            striped: "",
+            hover: "",
+            id: "my-table",
+            "per-page": _vm.perPage,
+            "current-page": _vm.currentPage,
+            items: _vm.items,
+            fields: _vm.fields,
+            busy: _vm.isBusy
+          },
+          on: {
+            "update:busy": function($event) {
+              _vm.isBusy = $event
+            }
+          },
+          scopedSlots: _vm._u([
+            {
+              key: "cell(Favorite)",
+              fn: function(data) {
+                return [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "text-primary underline hover:cursor-pointer",
+                      on: {
+                        click: function($event) {
+                          return _vm.addToFavorites(data)
+                        }
+                      }
+                    },
+                    [_vm._v("\n              Add to Favorites\n            ")]
+                  )
+                ]
+              }
+            }
+          ])
+        }),
+        _vm._v(" "),
+        _c("b-pagination", {
+          staticStyle: { position: "relative", left: "40%" },
+          attrs: {
+            "total-rows": _vm.items.length,
+            "per-page": _vm.perPage,
+            "aria-controls": "my-table",
+            "first-number": "",
+            "last-number": ""
+          },
+          model: {
+            value: _vm.currentPage,
+            callback: function($$v) {
+              _vm.currentPage = $$v
+            },
+            expression: "currentPage"
+          }
+        })
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

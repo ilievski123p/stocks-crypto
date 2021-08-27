@@ -1,56 +1,93 @@
 <template lang="html">
   <div>
-    <!-- <vs-table :data="users">
-      <template slot="header">
-        <h3>
-          Users
-        </h3>
-      </template>
-      <template slot="thead">
-        <vs-th>
-          Email
-        </vs-th>
-        <vs-th>
-          Name
-        </vs-th>
-        <vs-th>
-          Website
-        </vs-th>
-        <vs-th>
-          Nro
-        </vs-th>
-      </template>
 
-      <template slot-scope="{data}">
-        <vs-tr :key="indextr" v-for="(tr, indextr) in data" >
-          <vs-td :data="data[indextr].email">
-            {{data[indextr].email}}
-          </vs-td>
+    <div class="m-4 flex justify-center">
+        <b-table striped hover  id="my-table"
+        :per-page="perPage"
+        :current-page="currentPage"
+        :items="items" :fields="fields"
+        :busy.sync="isBusy">
 
-          <vs-td :data="data[indextr].username">
-            {{data[indextr].name}}
-          </vs-td>
+          <template #cell(Favorite)="data">
+              <div class="text-primary underline hover:cursor-pointer" @click="addToFavorites(data)">
+                Add to Favorites
+              </div>
+          </template>
 
-          <vs-td :data="data[indextr].id">
-            {{data[indextr].id}}
-          </vs-td>
+        </b-table>
 
-          <vs-td :data="data[indextr].id">
-            {{data[indextr].website}}
-          </vs-td>
-        </vs-tr>
-      </template>
-    </vs-table> -->
-    HEllo homepage
+
+        <b-pagination
+         v-model="currentPage"
+        :total-rows="items.length"
+        :per-page="perPage"
+        aria-controls="my-table"
+        first-number
+        last-number
+        style="position:relative; left:40%;"
+        />
+    </div>
+    
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import router from 'vue-router'
 export default {
- 
+  data(){
+    return {
+      locales:[],
+      locale:'G',
+      fields: ['T', 'c', 'h', "l", "o",'t', "v", 'Favorite'],
+      items: [],
+      perPage:10,
+      currentPage:1,
+      isBusy: true,
+      favorites:[]
+    }
+  },
+  watch:{
+    locale(newVal)
+    {
+      this.getStocks(newVal);
+    }
+  },
+  mounted(){
+    this.getStocks(this.locale);
+  },
   methods:{
-   
+    getStocks(locale)
+    {
+      this.$vs.loading();
+      axios.post('api/getStocks',{market: locale}).then(response => {
+        this.items = response.data.results;
+        this.isBusy = false;
+        this.$vs.loading.close();
+        })
+      axios.get('api/getFavorites').then(response => {
+        this.favorites = response.data;
+        this.$vs.loading.close();
+      })
+
+
+    },
+    addToFavorites(row)
+    {
+      axios.post('api/addToFavorites',{stock: row.item, type: 'stocks'}).then(response => {
+        if (response.data)
+        {
+          this.$vs.notify({title:'Success',text:'The stock has been added to your favorites!',color:'success'})   
+          
+          this.getStocks();
+        }
+      })
+    }
+  },
+  computed:{
+    rows() {
+      return this.items.length
+    },
   }
 }
 </script>

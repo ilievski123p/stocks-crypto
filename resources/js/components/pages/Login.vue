@@ -18,9 +18,9 @@
                     <div style="margin-top:6%; font-size:16px;" class=" font-weight-bold text-capitalize">Enter your password:</div>
                     <vs-input icon-no-border label-placeholder="Password" required v-model="password" type="password" icon="password" style="width:65%;"/>
                 </vs-row>
-                <div class="float-right mt-2 flex justify-end">
+                <vs-row class="mt-2 flex justify-content-end">
                     <vs-button type="gradient" @click="login" color="primary">Sign in!</vs-button>
-                </div>
+                </vs-row>
 
                 <vs-row vs-justify="center">
                     <div class="text-center mt-1">
@@ -51,8 +51,8 @@ export default {
             axios.post('api/login',{email: this.email, password: this.password}).then(response => {
                 if (response.data.success)
                 {
-                    window.localStorage.setItem('logged', this.email)
-                    window.localStorage.setItem('user', response.data.user)
+                    window.sessionStorage.setItem('logged', this.email)
+                    window.sessionStorage.setItem('user', response.data.user)
                     this.$router.push({name: 'stocks'})
                 }
                 else{
@@ -62,7 +62,7 @@ export default {
         }
     },
     created(){
-        if (window.localStorage.getItem('logged'))
+        if (window.sessionStorage.getItem('logged'))
             this.$router.push({name: 'stocks'})
     }
 }

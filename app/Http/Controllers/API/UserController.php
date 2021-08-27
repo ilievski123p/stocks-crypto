@@ -56,6 +56,7 @@ class UserController extends Controller
         } else {
             $success = false;
             $message = 'Unauthorised';
+            $user= '';
         }
 
         // response
@@ -88,4 +89,27 @@ class UserController extends Controller
         ];
         return response()->json($response);
     }
+
+    public function getUser()
+    {
+        return Auth::user();
+    }
+
+    public function updateUser(Request $request){
+        $user = Auth::user();
+
+        if (!empty($request->password))
+        {
+            if(!Hash::check($user->password, $request->password))
+                $user->password = Hash::make($request->password);
+        }
+        $user->email = $request->user['email'];
+        $user->name = $request->user['name'];
+        $response = $user->update();
+        
+        return response()->json([
+            'response' => $response,
+            'user'     => $user
+        ]);
+    }   
 }

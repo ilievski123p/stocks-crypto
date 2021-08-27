@@ -54,6 +54,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -61,20 +65,29 @@ __webpack_require__.r(__webpack_exports__);
     return {
       email: '',
       password: '',
-      name: ''
+      name: '',
+      password_confirm: ''
     };
   },
   methods: {
-    login: function login() {
+    register: function register() {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default().post('api/register', {
+      if (this.password !== this.password_confirm) {
+        this.$vs.notify({
+          title: 'Error!',
+          text: "Passwords don't match.",
+          color: 'danger',
+          icon: 'error'
+        });
+      } else axios__WEBPACK_IMPORTED_MODULE_0___default().post('api/register', {
         email: this.email,
         password: this.password,
         name: this.name
       }).then(function (response) {
         if (response.data.success) {
-          window.localStorage.setItem('logged', _this.email);
+          window.sessionStorage.setItem('logged', _this.email);
+          window.sessionStorage.setItem('user', response.data.user);
 
           _this.$router.push({
             name: 'stocks'
@@ -82,7 +95,7 @@ __webpack_require__.r(__webpack_exports__);
         } else {
           _this.$vs.notify({
             title: 'Error!',
-            text: 'Invalid username or password.',
+            text: 'Error has occured! Please try again.',
             color: 'danger',
             icon: 'error'
           });
@@ -91,7 +104,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    if (window.localStorage.getItem('logged')) this.$router.push({
+    if (window.sessionStorage.getItem('logged')) this.$router.push({
       name: 'stocks'
     });
   }
@@ -365,7 +378,7 @@ var render = function() {
                           {
                             staticClass: " font-weight-bold text-capitalize",
                             staticStyle: {
-                              "margin-top": "6%",
+                              "margin-top": "5%",
                               "font-size": "16px"
                             }
                           },
@@ -394,16 +407,53 @@ var render = function() {
                     ),
                     _vm._v(" "),
                     _c(
-                      "div",
-                      { staticClass: "float-right mt-2" },
+                      "vs-row",
+                      { staticClass: "flex justify-content-between" },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: " font-weight-bold text-capitalize",
+                            staticStyle: {
+                              "margin-top": "5%",
+                              "font-size": "16px"
+                            }
+                          },
+                          [_vm._v("Re-enter your password:")]
+                        ),
+                        _vm._v(" "),
+                        _c("vs-input", {
+                          staticStyle: { width: "65%" },
+                          attrs: {
+                            "icon-no-border": "",
+                            "label-placeholder": "Password Confirm",
+                            required: "",
+                            type: "password",
+                            icon: "password"
+                          },
+                          model: {
+                            value: _vm.password_confirm,
+                            callback: function($$v) {
+                              _vm.password_confirm = $$v
+                            },
+                            expression: "password_confirm"
+                          }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "vs-row",
+                      { staticClass: "mt-2 flex justify-content-end" },
                       [
                         _c(
                           "vs-button",
                           {
                             attrs: { type: "gradient", color: "primary" },
-                            on: { click: _vm.login }
+                            on: { click: _vm.register }
                           },
-                          [_vm._v("Sign in!")]
+                          [_vm._v("Sign up!")]
                         )
                       ],
                       1

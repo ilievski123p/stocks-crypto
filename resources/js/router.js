@@ -22,7 +22,7 @@ const router = new Router({
                 }
             },
             {
-                path: '/favorites/stocks',
+                path: '/favorite_stocks',
                 name:'favorites.stocks',
                 component: () => import('./components/dashboard/FavoriteStocks.vue'),
                 meta: {
@@ -40,9 +40,18 @@ const router = new Router({
                 }
             },
             {
-                path: '/favorites/cryptocurrency',
+                path: '/favorite_cryptocurrency',
                 name:'favorites.cryptocurrency',
                 component: () => import('./components/dashboard/FavoriteCryptocurrency.vue'),
+                meta: {
+                    rule: 'editor',
+                    requiresAuth:true
+                }
+            },
+            {
+                path: '/user_profile',
+                name:'user/profile',
+                component: () => import('./components/user_profile/UserProfile.vue'),
                 meta: {
                     rule: 'editor',
                     requiresAuth:true

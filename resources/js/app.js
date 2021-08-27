@@ -13,7 +13,7 @@ import 'vuesax/dist/vuesax.css' //Vuesax styles
 import 'material-icons/iconfont/material-icons.css';
 import "tailwindcss/tailwind.css"
 const axios = require('axios').default;
-
+const feather = require('feather-icons')
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
@@ -30,5 +30,7 @@ Vue.use(IconsPlugin)
 import App from './components/App.vue'
 const app =new Vue({
     router,
+    feather,
+    axios,
     render: h => h(App),
   }).$mount('#app')

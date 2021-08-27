@@ -68,8 +68,8 @@ __webpack_require__.r(__webpack_exports__);
         password: this.password
       }).then(function (response) {
         if (response.data.success) {
-          window.localStorage.setItem('logged', _this.email);
-          window.localStorage.setItem('user', response.data.user);
+          window.sessionStorage.setItem('logged', _this.email);
+          window.sessionStorage.setItem('user', response.data.user);
 
           _this.$router.push({
             name: 'stocks'
@@ -86,7 +86,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    if (window.localStorage.getItem('logged')) this.$router.push({
+    if (window.sessionStorage.getItem('logged')) this.$router.push({
       name: 'stocks'
     });
   }
@@ -351,8 +351,8 @@ var render = function() {
                     ),
                     _vm._v(" "),
                     _c(
-                      "div",
-                      { staticClass: "float-right mt-2 flex justify-end" },
+                      "vs-row",
+                      { staticClass: "mt-2 flex justify-content-end" },
                       [
                         _c(
                           "vs-button",

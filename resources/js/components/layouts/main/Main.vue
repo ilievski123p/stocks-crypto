@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="sl">
         <div>
             <transition :name="routerTransition">
                 <div>
@@ -21,6 +21,17 @@ export default {
     },
     components:{
         Navbar
+    },
+    created(){
+        if (!window.sessionStorage.getItem('logged'))
+            this.$router.push({name: 'login'})
     }
 }
 </script>
+<style scoped>
+#sl {
+    background: rgb(248, 248, 248);
+	width: 100%;
+	height: 100vh;
+}
+</style>

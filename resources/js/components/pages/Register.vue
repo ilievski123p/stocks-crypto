@@ -19,12 +19,16 @@
                     <vs-input icon-no-border label-placeholder="Email" autofocus required type="email" v-model="email" icon="alternate_email" style="width:65%;"/>
                 </vs-row>
                 <vs-row class="flex justify-content-between">
-                    <div style="margin-top:6%; font-size:16px;" class=" font-weight-bold text-capitalize">Enter your password:</div>
+                    <div style="margin-top:5%; font-size:16px;" class=" font-weight-bold text-capitalize">Enter your password:</div>
                     <vs-input icon-no-border label-placeholder="Password" required v-model="password" type="password" icon="password" style="width:65%;"/>
                 </vs-row>
-                <div class="float-right mt-2">
-                    <vs-button type="gradient" @click="login" color="primary">Sign in!</vs-button>
-                </div>
+                 <vs-row class="flex justify-content-between">
+                    <div style="margin-top:5%; font-size:16px;" class=" font-weight-bold text-capitalize">Re-enter your password:</div>
+                    <vs-input icon-no-border label-placeholder="Password Confirm" required v-model="password_confirm" type="password" icon="password" style="width:65%;"/>
+                </vs-row>
+                <vs-row class="mt-2 flex justify-content-end">
+                    <vs-button type="gradient" @click="register" color="primary">Sign up!</vs-button>
+                </vs-row>
 
                 <vs-row vs-justify="center">
                     <div class="text-center mt-1">
@@ -48,25 +52,32 @@ export default {
             email:'',
             password:'',
             name: '',
+            password_confirm:''
         }
     },
     methods:{
-        login()
+        register()
         {
-            axios.post('api/register',{email: this.email, password: this.password, name: this.name}).then(response => {
-                if (response.data.success)
-                {
-                    window.localStorage.setItem('logged', this.email)
-                    this.$router.push({name: 'stocks'})
-                }
-                else{
-                    this.$vs.notify({title:'Error!',text:'Invalid username or password.',color:'danger',icon:'error'})
-                }
-            })
+            if (this.password !== this.password_confirm)
+            {
+                this.$vs.notify({title:'Error!',text:"Passwords don't match.",color:'danger',icon:'error'})
+            }
+            else
+                axios.post('api/register',{email: this.email, password: this.password, name: this.name}).then(response => {
+                    if (response.data.success)
+                    {
+                        window.sessionStorage.setItem('logged', this.email)
+                        window.sessionStorage.setItem('user', response.data.user)
+                        this.$router.push({name: 'stocks'})
+                    }
+                    else{
+                        this.$vs.notify({title:'Error!',text:'Error has occured! Please try again.',color:'danger',icon:'error'})
+                    }
+                })
         }
     },
     created(){
-        if (window.localStorage.getItem('logged'))
+        if (window.sessionStorage.getItem('logged'))
             this.$router.push({name: 'stocks'})
     }
 }
