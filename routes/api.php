@@ -9,7 +9,7 @@ Route::post('register', [UserController::class, 'register']);
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::post('getStocks', [StocksController::class, 'getStocks'])->middleware('api');
-Route::get('getCryptos',[StocksController::class, 'getCryptos'])->middleware('api');
+Route::post('getCryptos',[StocksController::class, 'getCryptos'])->middleware('api');
 
 Route::get('getUser',[UserController::class, 'getUser'])->middleware('api');
 Route::post('updateUser',[UserController::class, 'updateUser'])->middleware('api');

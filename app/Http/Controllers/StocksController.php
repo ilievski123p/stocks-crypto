@@ -36,7 +36,8 @@ class StocksController extends Controller
    {
       $favorite = new Favorites();
       $favorite->user_id = Auth::id();
-      $favorite->code = json_encode($request->stock);
+      $favorite->code_full = json_encode($request->stock);
+      $favorite->code = $request->stock["T"];
       $favorite->type = $request->type;
       $response = $favorite->save();
 

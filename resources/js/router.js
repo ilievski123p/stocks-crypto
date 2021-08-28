@@ -50,8 +50,17 @@ const router = new Router({
             },
             {
                 path: '/user_profile',
-                name:'user/profile',
+                name:'user.profile',
                 component: () => import('./components/user_profile/UserProfile.vue'),
+                meta: {
+                    rule: 'editor',
+                    requiresAuth:true
+                }
+            },
+            {
+                path: '/full_info',
+                name:'full_info',
+                component: () => import('./components/FullInfo.vue'),
                 meta: {
                     rule: 'editor',
                     requiresAuth:true

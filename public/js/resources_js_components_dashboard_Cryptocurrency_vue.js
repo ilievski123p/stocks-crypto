@@ -37,41 +37,172 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      fields: ['T', 'c', 'h', "l", "o", 't', "v", 'Favorite'],
+      locales: [],
+      fields: [{
+        key: 'T',
+        label: 'Name',
+        sortable: true
+      }, {
+        key: 'c',
+        label: 'Closed Price',
+        sortable: true
+      }, {
+        key: 'h',
+        label: 'Highest Price',
+        sortable: true
+      }, {
+        key: 'l',
+        label: 'Lowest Price',
+        sortable: true
+      }, {
+        key: 'o',
+        label: 'Opened Price',
+        sortable: true
+      }, {
+        key: 't',
+        label: 'Start of aggregated window',
+        formatter: 'dateFormatter',
+        sortable: true,
+        sortByFormatted: true,
+        filterByFormatted: true
+      }, {
+        key: 'v',
+        label: 'Trading Volume',
+        sortable: true
+      }, 'Favorite'],
       items: [],
       perPage: 10,
       currentPage: 1,
-      isBusy: true
+      isBusy: true,
+      favorites: [],
+      filter: null,
+      filterOn: [],
+      sortBy: '',
+      sortDesc: false,
+      sortDirection: 'asc'
     };
   },
-  watch: {
-    locale: function locale(newVal) {
-      this.getStocks(newVal);
-    }
-  },
   mounted: function mounted() {
-    this.getStocks(this.locale);
+    this.getCrypto();
   },
   methods: {
-    getStocks: function getStocks(locale) {
+    getCrypto: function getCrypto() {
       var _this = this;
 
       this.$vs.loading();
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get('api/getCryptos').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post('api/getCryptos').then(function (response) {
         _this.items = response.data.results;
         _this.isBusy = false;
 
         _this.$vs.loading.close();
       });
-    }
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get('api/getFavorites').then(function (response) {
+        response.data = response.data.filter(function (x) {
+          return x.type == 'crypto';
+        });
+        response.data.forEach(function (element) {
+          _this.favorites.push(element.code);
+        });
+
+        _this.$vs.loading.close();
+      });
+    },
+    addToFavorites: function addToFavorites(row) {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post('api/addToFavorites', {
+        stock: row.item,
+        type: 'crypto'
+      }).then(function (response) {
+        if (response.data) {
+          _this2.$vs.notify({
+            title: 'Success',
+            text: 'The cryptocurrency has been added to your favorites!',
+            color: 'success'
+          });
+
+          _this2.getCrypto();
+        }
+      });
+    },
+    dateFormatter: function dateFormatter(value) {
+      var miliseconds = value;
+      var dataObject = new Date(miliseconds);
+      return dataObject.toLocaleString();
+    },
+    onFiltered: function onFiltered(filteredItems) {
+      // Trigger pagination to update the number of buttons/pages due to filtering
+      this.totalRows = filteredItems.length;
+      this.currentPage = 1;
+    } // handleSearch()
+    // {
+    //   this.setTimeout(this.filter(),1500)
+    // },
+    // filter(row)
+    // {
+    //   if (row.name.contains(this.filter))
+    //     return true
+    //   else 
+    //     return false
+    // }
+
   },
-  rows: function rows() {
-    return this.items.length;
+  computed: {
+    rows: function rows() {
+      return this.items.length;
+    },
+    sortOptions: function sortOptions() {
+      // Create an options list from our fields
+      return this.fields.filter(function (f) {
+        return f.sortable;
+      }).map(function (f) {
+        return {
+          text: f.label,
+          value: f.key
+        };
+      });
+    }
   }
 });
 
@@ -164,8 +295,50 @@ var render = function() {
   return _c("div", [
     _c(
       "div",
-      { staticClass: "m-4 flex justify-center" },
+      { staticClass: "m-4" },
       [
+        _c(
+          "b-input-group",
+          { attrs: { size: "sm" } },
+          [
+            _c("b-form-input", {
+              attrs: {
+                id: "filter-input",
+                type: "search",
+                placeholder: "Type to Search"
+              },
+              model: {
+                value: _vm.filter,
+                callback: function($$v) {
+                  _vm.filter = $$v
+                },
+                expression: "filter"
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "b-input-group-append",
+              [
+                _c(
+                  "b-button",
+                  {
+                    staticClass: "bg-primary",
+                    attrs: { disabled: !_vm.filter },
+                    on: {
+                      click: function($event) {
+                        _vm.filter = ""
+                      }
+                    }
+                  },
+                  [_vm._v("Clear")]
+                )
+              ],
+              1
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
         _c("b-table", {
           attrs: {
             striped: "",
@@ -175,17 +348,77 @@ var render = function() {
             "current-page": _vm.currentPage,
             items: _vm.items,
             fields: _vm.fields,
-            busy: _vm.isBusy
+            busy: _vm.isBusy,
+            filter: _vm.filter,
+            "filter-included-fields": _vm.filterOn,
+            "sort-by": _vm.sortBy,
+            "sort-desc": _vm.sortDesc,
+            "sort-direction": _vm.sortDirection
           },
           on: {
             "update:busy": function($event) {
               _vm.isBusy = $event
+            },
+            "update:sortBy": function($event) {
+              _vm.sortBy = $event
+            },
+            "update:sort-by": function($event) {
+              _vm.sortBy = $event
+            },
+            "update:sortDesc": function($event) {
+              _vm.sortDesc = $event
+            },
+            "update:sort-desc": function($event) {
+              _vm.sortDesc = $event
             }
-          }
+          },
+          scopedSlots: _vm._u([
+            {
+              key: "cell(t)",
+              fn: function(data) {
+                return [
+                  _vm._v("\n           " + _vm._s(data.value) + "\n        ")
+                ]
+              }
+            },
+            {
+              key: "cell(Favorite)",
+              fn: function(data) {
+                return [
+                  !_vm.favorites.includes(data.item.T)
+                    ? _c(
+                        "div",
+                        {
+                          staticClass:
+                            "text-primary underline hover:cursor-pointer",
+                          on: {
+                            click: function($event) {
+                              return _vm.addToFavorites(data)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n              Add to Favorites\n            "
+                          )
+                        ]
+                      )
+                    : _c(
+                        "div",
+                        {
+                          staticClass:
+                            "text-primary underline hover:cursor-pointer"
+                        },
+                        [_vm._v("\n              Added!\n            ")]
+                      )
+                ]
+              }
+            }
+          ])
         }),
         _vm._v(" "),
         _c("b-pagination", {
-          staticStyle: { position: "relative", left: "40%" },
+          staticClass: "flex justify-content-end",
           attrs: {
             "total-rows": _vm.items.length,
             "per-page": _vm.perPage,

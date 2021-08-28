@@ -17,6 +17,7 @@ class CreateFavoritesTable extends Migration
             $table->id();
             $table->string('user_id');
             $table->string('code');
+            $table->text('code_full');
             $table->string('type');
             $table->timestamps();
         });

@@ -14,7 +14,8 @@ class UpdateFavoritesTable extends Migration
     public function up()
     {
         Schema::table('favorites', function (Blueprint $table) {          
-            $table->text('code')->change();
+            // $table->string('code')->after('type');
+            // $table->text('code_full')->after('code');
         });
     }
 
@@ -27,7 +28,8 @@ class UpdateFavoritesTable extends Migration
     {
         Schema::table('favorites', function (Blueprint $table)
         {
-            $table->dropColumn('code');
+            // $table->dropColumn('code');
+            // $table->dropColumn('code_full');
         });
     }
 }
