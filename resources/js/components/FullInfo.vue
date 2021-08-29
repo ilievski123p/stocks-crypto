@@ -1,7 +1,5 @@
 <template>
-<div class="m-4">
-
-  {{ticker}}
+<div class="m-4" v-if="ticker">
 <div>
  <vs-row class="vx-row flex justify-content-between mb-4">   
   <b-card header-tag="header" style="width:23%;" class="mr-4" footer-tag="footer">
@@ -68,11 +66,11 @@
 <div>
   <b-tabs content-class="mt-3" align="center">
     <b-tab title="Graph View" active>
-        <graph-view/>
+        <graph-view  :times="times"/>
     </b-tab>
-    <b-tab title="Table View">
-        <table-view/>
-    </b-tab>
+    <!-- <b-tab title="Table View">
+        <table-view :times="times" />
+    </b-tab> -->
   </b-tabs>
 </div>
 
@@ -82,7 +80,9 @@
         class="mb-4"
     >
     <b-card-text>
-        <vs-chip color="primary">Helo </vs-chip>
+        <div class="flex justify-content-start">
+          <vs-chip v-for="(item,index) in ticker.similar" color="primary" @click="redirectToClick(item)" :key="index"> {{item}} </vs-chip>
+        </div>
     </b-card-text>
   </b-card>  
 </div>
@@ -90,6 +90,7 @@
 </div>
 </template>
 <script>
+import router from 'vue-router'
 import GraphView from './full_info/GraphView.vue'
 import TableView from './full_info/TableView.vue'
 import axios from 'axios'
@@ -100,7 +101,8 @@ export default {
     },
     data(){
         return{
-          ticker: null
+          ticker: null,
+          times: null
         }
     },
     mounted(){
@@ -108,8 +110,21 @@ export default {
       axios.get('https://api.polygon.io/v1/meta/symbols/' + this.$route.params.code + '/company?&apiKey=axI0heizc_7p7_9aew40pAGjvQ7tf0H9').then(response => {
         this.ticker = response.data
         }).catch(error => {
-          console.log(error)
+          // console.log(error)
+          this.$router.push({name: 'not_available'})
         })
+
+        axios.get('https://api.polygon.io/v2/aggs/ticker/'+ this.$route.params.code +'/range/1/day/2021-04-14/2021-08-14?adjusted=true&sort=asc&limit=1000&apiKey=axI0heizc_7p7_9aew40pAGjvQ7tf0H9').then(response =>{
+          this.times = response.data
+        }).catch(error => {
+          console.log(error)
+        })    
+      },
+    methods:{
+      redirectToClick(where)
+      {
+        alert("Hello" + where);
+      }
     }
 }
 </script>

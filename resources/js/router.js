@@ -66,6 +66,15 @@ const router = new Router({
                     requiresAuth:true
                 }
             },
+            {
+                path: '/not_available',
+                name:'not_available',
+                component: () => import('./components/NotAvailable.vue'),
+                meta: {
+                    rule: 'editor',
+                    requiresAuth:true
+                }
+            },
            
         ],
     },

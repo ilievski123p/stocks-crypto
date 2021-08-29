@@ -109,6 +109,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     GraphView: _full_info_GraphView_vue__WEBPACK_IMPORTED_MODULE_0__.default,
@@ -116,7 +117,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      ticker: null
+      ticker: null,
+      times: null
     };
   },
   mounted: function mounted() {
@@ -125,8 +127,21 @@ __webpack_require__.r(__webpack_exports__);
     axios__WEBPACK_IMPORTED_MODULE_2___default().get('https://api.polygon.io/v1/meta/symbols/' + this.$route.params.code + '/company?&apiKey=axI0heizc_7p7_9aew40pAGjvQ7tf0H9').then(function (response) {
       _this.ticker = response.data;
     })["catch"](function (error) {
+      // console.log(error)
+      _this.$router.push({
+        name: 'not_available'
+      });
+    });
+    axios__WEBPACK_IMPORTED_MODULE_2___default().get('https://api.polygon.io/v2/aggs/ticker/' + this.$route.params.code + '/range/1/day/2021-04-14/2021-08-14?adjusted=true&sort=asc&limit=1000&apiKey=axI0heizc_7p7_9aew40pAGjvQ7tf0H9').then(function (response) {
+      _this.times = response.data;
+    })["catch"](function (error) {
       console.log(error);
     });
+  },
+  methods: {
+    redirectToClick: function redirectToClick(where) {
+      alert("Hello" + where);
+    }
   }
 });
 
@@ -159,12 +174,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['times'],
   data: function data() {
     return {
-      values: [[10, 5, 5, 5], [40, 10, 10, 10], [30, 30, 30, 30], [100, 20, 40, 60]]
+      values: [[10, 5, 5, 5], [40, 10, 10, 10], [30, 30, 30, 30], [100, 20, 40, 60]],
+      val: []
     };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    if (this.times) this.times.forEach(function (element) {
+      _this.val.push([element.l, element.h, element.c, element.o]);
+    });else this.val = this.values;
   }
 });
 
@@ -232,14 +255,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['times'],
   data: function data() {
     return {
       items: [],
       fields: [{
-        key: 'T',
-        label: 'Name',
-        sortable: true
-      }, {
         key: 'c',
         label: 'Closed Price',
         sortable: true
@@ -255,17 +275,6 @@ __webpack_require__.r(__webpack_exports__);
         key: 'o',
         label: 'Opened Price',
         sortable: true
-      }, {
-        key: 't',
-        label: 'Start of aggregated window',
-        formatter: 'dateFormatter',
-        sortable: true,
-        sortByFormatted: true,
-        filterByFormatted: true
-      }, {
-        key: 'v',
-        label: 'Trading Volume',
-        sortable: true
       }],
       perPage: 10,
       currentPage: 1,
@@ -277,6 +286,21 @@ __webpack_require__.r(__webpack_exports__);
       sortDesc: false,
       sortDirection: 'asc'
     };
+  },
+  moutned: function moutned() {
+    var _this = this;
+
+    if (this.times) {
+      this.times.forEach(function (element) {
+        _this.items.push({
+          "c": element.c,
+          "h": element.h,
+          "l": element.l,
+          "o": element.o
+        });
+      });
+      console.log(this.items);
+    }
   },
   methods: {
     dateFormatter: function dateFormatter(value) {
@@ -532,226 +556,295 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "m-4" }, [
-    _vm._v("\r\n\r\n  " + _vm._s(_vm.ticker) + "\r\n"),
-    _c(
-      "div",
-      [
+  return _vm.ticker
+    ? _c("div", { staticClass: "m-4" }, [
         _c(
-          "vs-row",
-          { staticClass: "vx-row flex justify-content-between mb-4" },
+          "div",
           [
             _c(
-              "b-card",
-              {
-                staticClass: "mr-4",
-                staticStyle: { width: "23%" },
-                attrs: { "header-tag": "header", "footer-tag": "footer" }
-              },
+              "vs-row",
+              { staticClass: "vx-row flex justify-content-between mb-4" },
               [
                 _c(
-                  "b-card-text",
+                  "b-card",
+                  {
+                    staticClass: "mr-4",
+                    staticStyle: { width: "23%" },
+                    attrs: { "header-tag": "header", "footer-tag": "footer" }
+                  },
                   [
                     _c(
-                      "vs-row",
-                      { staticClass: "flex justify-content-between" },
+                      "b-card-text",
                       [
                         _c(
-                          "div",
-                          {
-                            staticClass: "mr-4",
-                            staticStyle: { "font-weight": "bold" }
-                          },
-                          [_vm._v("Country")]
+                          "vs-row",
+                          { staticClass: "flex justify-content-between" },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "mr-4",
+                                staticStyle: { "font-weight": "bold" }
+                              },
+                              [_vm._v("Country")]
+                            ),
+                            _vm._v(" "),
+                            _c("div", [_vm._v(_vm._s(_vm.ticker.country))])
+                          ]
                         ),
                         _vm._v(" "),
-                        _c("div", [_vm._v(_vm._s(_vm.ticker.country))])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "vs-row",
-                      { staticClass: "flex justify-content-between" },
-                      [
                         _c(
-                          "div",
-                          {
-                            staticClass: "mr-4",
-                            staticStyle: { "font-weight": "bold" }
-                          },
-                          [_vm._v("Industry")]
+                          "vs-row",
+                          { staticClass: "flex justify-content-between" },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "mr-4",
+                                staticStyle: { "font-weight": "bold" }
+                              },
+                              [_vm._v("Industry")]
+                            ),
+                            _vm._v(" "),
+                            _c("div", [_vm._v(_vm._s(_vm.ticker.industry))])
+                          ]
                         ),
                         _vm._v(" "),
-                        _c("div", [_vm._v(_vm._s(_vm.ticker.industry))])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "vs-row",
-                      { staticClass: "flex justify-content-between" },
-                      [
                         _c(
-                          "div",
-                          {
-                            staticClass: "mr-4",
-                            staticStyle: { "font-weight": "bold" }
-                          },
-                          [_vm._v("Sector")]
+                          "vs-row",
+                          { staticClass: "flex justify-content-between" },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "mr-4",
+                                staticStyle: { "font-weight": "bold" }
+                              },
+                              [_vm._v("Sector")]
+                            ),
+                            _vm._v(" "),
+                            _c("div", [_vm._v(_vm._s(_vm.ticker.sector))])
+                          ]
                         ),
                         _vm._v(" "),
-                        _c("div", [_vm._v(_vm._s(_vm.ticker.sector))])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "vs-row",
-                      { staticClass: "flex justify-content-between" },
-                      [
                         _c(
-                          "div",
-                          {
-                            staticClass: "mr-4",
-                            staticStyle: { "font-weight": "bold" }
-                          },
-                          [_vm._v("Number of employees:")]
+                          "vs-row",
+                          { staticClass: "flex justify-content-between" },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "mr-4",
+                                staticStyle: { "font-weight": "bold" }
+                              },
+                              [_vm._v("Number of employees:")]
+                            ),
+                            _vm._v(" "),
+                            _c("div", [_vm._v(_vm._s(_vm.ticker.employees))])
+                          ]
                         ),
                         _vm._v(" "),
-                        _c("div", [_vm._v(_vm._s(_vm.ticker.employees))])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
-                    _c(
-                      "vs-row",
-                      { staticClass: "flex justify-content-between" },
-                      [
+                        _c("hr"),
+                        _vm._v(" "),
                         _c(
-                          "div",
-                          {
-                            staticClass: "mr-4",
-                            staticStyle: { "font-weight": "bold" }
-                          },
-                          [_vm._v("Phone")]
+                          "vs-row",
+                          { staticClass: "flex justify-content-between" },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "mr-4",
+                                staticStyle: { "font-weight": "bold" }
+                              },
+                              [_vm._v("Phone")]
+                            ),
+                            _vm._v(" "),
+                            _c("div", [_vm._v(_vm._s(_vm.ticker.phone))])
+                          ]
                         ),
                         _vm._v(" "),
-                        _c("div", [_vm._v(_vm._s(_vm.ticker.phone))])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "vs-row",
-                      { staticClass: "flex justify-content-between" },
-                      [
                         _c(
-                          "div",
-                          {
-                            staticClass: "mr-4",
-                            staticStyle: { "font-weight": "bold" }
-                          },
-                          [_vm._v("Address")]
-                        ),
-                        _vm._v(" "),
-                        _c("div", [_vm._v(_vm._s(_vm.ticker.hq_address))])
-                      ]
+                          "vs-row",
+                          { staticClass: "flex justify-content-between" },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "mr-4",
+                                staticStyle: { "font-weight": "bold" }
+                              },
+                              [_vm._v("Address")]
+                            ),
+                            _vm._v(" "),
+                            _c("div", [_vm._v(_vm._s(_vm.ticker.hq_address))])
+                          ]
+                        )
+                      ],
+                      1
                     )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "b-card",
+                  {
+                    staticStyle: { width: "75%" },
+                    attrs: { "header-tag": "header", "footer-tag": "footer" },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "header",
+                          fn: function() {
+                            return [
+                              _c("h6", { staticClass: "mb-0" }, [
+                                _c("div", [_vm._v(_vm._s(_vm.ticker.name))])
+                              ])
+                            ]
+                          },
+                          proxy: true
+                        }
+                      ],
+                      null,
+                      false,
+                      774672117
+                    )
+                  },
+                  [
+                    _vm._v(" "),
+                    _c("b-card-text", [
+                      _c("div", { staticClass: "w-1/2" }, [
+                        _vm._v(_vm._s(_vm.ticker.description))
+                      ]),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        [
+                          _c(
+                            "vs-row",
+                            { staticClass: "flex justify-content-start" },
+                            [
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "mr-4",
+                                  staticStyle: { "font-weight": "bold" }
+                                },
+                                [_vm._v("Exchange market:")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticStyle: { "margin-left": "5%" } },
+                                [_vm._v(_vm._s(_vm.ticker.hq_address))]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "vs-row",
+                            { staticClass: "flex justify-content-start" },
+                            [
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "mr-4",
+                                  staticStyle: { "font-weight": "bold" }
+                                },
+                                [_vm._v("Symbol:")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticStyle: { "margin-left": "10%" } },
+                                [_vm._v(_vm._s(_vm.ticker.symbol))]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "vs-row",
+                            { staticClass: "flex justify-content-start" },
+                            [
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "mr-4",
+                                  staticStyle: { "font-weight": "bold" }
+                                },
+                                [_vm._v("Exchange Symbol:")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticStyle: { "margin-left": "4.8%" } },
+                                [_vm._v(_vm._s(_vm.ticker.exchangeSymbol))]
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ])
                   ],
                   1
                 )
               ],
               1
-            ),
-            _vm._v(" "),
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          [
+            _c(
+              "b-tabs",
+              { attrs: { "content-class": "mt-3", align: "center" } },
+              [
+                _c(
+                  "b-tab",
+                  { attrs: { title: "Graph View", active: "" } },
+                  [_c("graph-view", { attrs: { times: _vm.times } })],
+                  1
+                )
+              ],
+              1
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "mt-4" },
+          [
             _c(
               "b-card",
-              {
-                staticStyle: { width: "75%" },
-                attrs: { "header-tag": "header", "footer-tag": "footer" },
-                scopedSlots: _vm._u([
-                  {
-                    key: "header",
-                    fn: function() {
-                      return [
-                        _c("h6", { staticClass: "mb-0" }, [
-                          _c("div", [_vm._v(_vm._s(_vm.ticker.name))])
-                        ])
-                      ]
-                    },
-                    proxy: true
-                  }
-                ])
-              },
+              { staticClass: "mb-4", attrs: { title: "Similar to this:" } },
               [
-                _vm._v(" "),
                 _c("b-card-text", [
-                  _c("div", { staticClass: "w-1/2" }, [
-                    _vm._v(_vm._s(_vm.ticker.description))
-                  ]),
-                  _vm._v(" "),
-                  _c("hr"),
-                  _vm._v(" "),
                   _c(
                     "div",
-                    [
-                      _c(
-                        "vs-row",
-                        { staticClass: "flex justify-content-start" },
-                        [
-                          _c(
-                            "div",
-                            {
-                              staticClass: "mr-4",
-                              staticStyle: { "font-weight": "bold" }
-                            },
-                            [_vm._v("Exchange market:")]
-                          ),
-                          _vm._v(" "),
-                          _c("div", { staticStyle: { "margin-left": "5%" } }, [
-                            _vm._v(_vm._s(_vm.ticker.hq_address))
-                          ])
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "vs-row",
-                        { staticClass: "flex justify-content-start" },
-                        [
-                          _c(
-                            "div",
-                            {
-                              staticClass: "mr-4",
-                              staticStyle: { "font-weight": "bold" }
-                            },
-                            [_vm._v("Symbol:")]
-                          ),
-                          _vm._v(" "),
-                          _c("div", { staticStyle: { "margin-left": "10%" } }, [
-                            _vm._v(_vm._s(_vm.ticker.symbol))
-                          ])
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "vs-row",
-                        { staticClass: "flex justify-content-start" },
-                        [
-                          _c(
-                            "div",
-                            {
-                              staticClass: "mr-4",
-                              staticStyle: { "font-weight": "bold" }
-                            },
-                            [_vm._v("Exchange Symbol:")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            { staticStyle: { "margin-left": "4.8%" } },
-                            [_vm._v(_vm._s(_vm.ticker.exchangeSymbol))]
-                          )
-                        ]
+                    { staticClass: "flex justify-content-start" },
+                    _vm._l(_vm.ticker.similar, function(item, index) {
+                      return _c(
+                        "vs-chip",
+                        {
+                          key: index,
+                          attrs: { color: "primary" },
+                          on: {
+                            click: function($event) {
+                              return _vm.redirectToClick(item)
+                            }
+                          }
+                        },
+                        [_vm._v(" " + _vm._s(item) + " ")]
                       )
-                    ],
+                    }),
                     1
                   )
                 ])
@@ -761,61 +854,8 @@ var render = function() {
           ],
           1
         )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      [
-        _c(
-          "b-tabs",
-          { attrs: { "content-class": "mt-3", align: "center" } },
-          [
-            _c(
-              "b-tab",
-              { attrs: { title: "Graph View", active: "" } },
-              [_c("graph-view")],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "b-tab",
-              { attrs: { title: "Table View" } },
-              [_c("table-view")],
-              1
-            )
-          ],
-          1
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "mt-4" },
-      [
-        _c(
-          "b-card",
-          { staticClass: "mb-4", attrs: { title: "Similar to this:" } },
-          [
-            _c(
-              "b-card-text",
-              [
-                _c("vs-chip", { attrs: { color: "primary" } }, [
-                  _vm._v("Helo ")
-                ])
-              ],
-              1
-            )
-          ],
-          1
-        )
-      ],
-      1
-    )
-  ])
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -852,13 +892,11 @@ var render = function() {
               shape: "normal",
               opacity: 0.6,
               borderline: true,
-              labels: ["1Q", "2Q", "3Q", "4Q"],
-              values: _vm.values
+              labels: ["10-10-2020", "10-02-2021", "10-05-2021", "10-08-2021"],
+              values: _vm.val
             }
           },
           [
-            _c("note", { attrs: { text: "Data for the past two months" } }),
-            _vm._v(" "),
             _c("legends", {
               attrs: {
                 names: [

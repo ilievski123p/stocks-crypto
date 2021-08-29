@@ -51,15 +51,12 @@
 
 <script>
   export default {
+    props:['times'],
     data() {
       return {
       items: [],
       fields:[
-        {
-          key: 'T',
-          label: 'Name',
-          sortable: true,
-        },
+
         {
           key: 'c',
           label: 'Closed Price',
@@ -79,20 +76,6 @@
           key: 'o',
           label: 'Opened Price',
           sortable: true,
-        },
-        {
-          key: 't',
-          label: 'Start of aggregated window',
-          formatter: 'dateFormatter',
-          sortable: true,
-          sortByFormatted: true,
-          filterByFormatted: true
-        },
-        {
-          key: 'v',
-          label: 'Trading Volume',
-          sortable: true,
-
         }
       ],
       perPage:10,
@@ -105,6 +88,22 @@
       sortDesc: false,
       sortDirection: 'asc',
     }      
+  },
+  moutned(){
+    if (this.times)
+    {
+    this.times.forEach(element => {
+      this.items.push({
+        "c": element.c,
+        "h": element.h,
+        "l": element.l,
+        "o": element.o,
+
+      })
+    }) 
+
+    console.log(this.items)
+    }
   },
   methods:{
     dateFormatter(value)
