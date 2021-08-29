@@ -58,7 +58,7 @@ const router = new Router({
                 }
             },
             {
-                path: '/full_info',
+                path: '/full_info/:code',
                 name:'full_info',
                 component: () => import('./components/FullInfo.vue'),
                 meta: {

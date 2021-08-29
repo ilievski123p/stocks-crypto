@@ -48,4 +48,5 @@ class StocksController extends Controller
    {
       return Favorites::get();
    }
+
 }

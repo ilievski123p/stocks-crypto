@@ -142,7 +142,7 @@ __webpack_require__.r(__webpack_exports__);
       this.$router.push({
         name: 'full_info',
         params: {
-          value: row.item
+          code: row.item.T
         }
       });
     },

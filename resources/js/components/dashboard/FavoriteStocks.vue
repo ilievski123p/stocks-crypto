@@ -134,7 +134,7 @@ export default {
     },
     openFullInfo(row)
     {
-        this.$router.push({name: 'full_info', params: {value: row.item}})
+        this.$router.push({name: 'full_info', params: {code: row.item.T}})
     },
     dateFormatter(value)
     {

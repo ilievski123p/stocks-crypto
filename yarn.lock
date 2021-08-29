@@ -3080,6 +3080,11 @@
   "resolved" "https://registry.npmjs.org/he/-/he-1.2.0.tgz"
   "version" "1.2.0"
 
+"highcharts@>=4.2.0":
+  "integrity" "sha512-OMEdFCaG626ES1JEcKAvJTpxAOMuchy0XuAplmnOs0Yu7NMd2RMfTLFQ2fCJOxo3ubSdm/RVQwKAWC+5HYThnw=="
+  "resolved" "https://registry.npmjs.org/highcharts/-/highcharts-9.2.2.tgz"
+  "version" "9.2.2"
+
 "hmac-drbg@^1.0.1":
   "integrity" "sha1-0nRXAQJabHdabFRXk+1QL8DGSaE="
   "resolved" "https://registry.npmjs.org/hmac-drbg/-/hmac-drbg-1.0.1.tgz"
@@ -3560,6 +3565,18 @@
     "universalify" "^2.0.0"
   optionalDependencies:
     "graceful-fs" "^4.1.6"
+
+"juijs-chart@2.6.9":
+  "integrity" "sha512-l62qiuz/kPELx10zNC8gzV8DWSGdTkUhOCkmvDDlQzoW0a59vDP7sk8ahbzb0lUuCVGVjOL94YuKKriwcEcQtA=="
+  "resolved" "https://registry.npmjs.org/juijs-chart/-/juijs-chart-2.6.9.tgz"
+  "version" "2.6.9"
+  dependencies:
+    "juijs-graph" "1.1.4"
+
+"juijs-graph@1.1.4":
+  "integrity" "sha512-97LnBbwTrqbKBi2nS4nfvsHXKAArwcVxmGHkoXx9X7GT1uGXdRONmdLhjYc87UkWWQr5p91sSWlwA0qXvQg7/Q=="
+  "resolved" "https://registry.npmjs.org/juijs-graph/-/juijs-graph-1.1.4.tgz"
+  "version" "1.1.4"
 
 "junk@^3.1.0":
   "integrity" "sha512-pBxcB3LFc8QVgdggvZWyeys+hnrNWg4OcZIU/1X59k5jQdLBlCsYGRQaz234SqoRLTCgMH00fY0xRJH+F9METQ=="
@@ -5769,6 +5786,19 @@
   "resolved" "https://registry.npmjs.org/vue-functional-data-merge/-/vue-functional-data-merge-3.1.0.tgz"
   "version" "3.1.0"
 
+"vue-graph@^0.8.7":
+  "integrity" "sha512-VLnYZ6AzVGGykIH4HothlJ9J39G2ute7crBeD4bvzvNCFq3+GhivUygrY/UUD3uN0e+BiYPCYq4v58vTIU7DiA=="
+  "resolved" "https://registry.npmjs.org/vue-graph/-/vue-graph-0.8.7.tgz"
+  "version" "0.8.7"
+  dependencies:
+    "juijs-chart" "2.6.9"
+    "vue" "^2.6.7"
+
+"vue-highcharts@^0.1.0":
+  "integrity" "sha512-P0474D2s6P1ww5c/KbMN4iG8IOp7L1nWgjQwRJvKsq2yCNaeywg49/EHa2zHOKbS1MFxOXkRN2Vu1OSBc+gFYQ=="
+  "resolved" "https://registry.npmjs.org/vue-highcharts/-/vue-highcharts-0.1.0.tgz"
+  "version" "0.1.0"
+
 "vue-hot-reload-api@^2.3.0":
   "integrity" "sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog=="
   "resolved" "https://registry.npmjs.org/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz"
@@ -5819,7 +5849,7 @@
   "resolved" "https://registry.npmjs.org/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz"
   "version" "1.9.1"
 
-"vue@^2.5.18", "vue@^2.6.11", "vue@^2.6.14", "vue@^2.6.9", "vue@^3.0.5":
+"vue@^2.5.18", "vue@^2.6.11", "vue@^2.6.14", "vue@^2.6.7", "vue@^2.6.9", "vue@^3.0.5", "vue@>=2.0.0":
   "integrity" "sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-2.6.14.tgz"
   "version" "2.6.14"

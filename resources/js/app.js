@@ -26,6 +26,14 @@ Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
 
+import VueHighcharts from 'vue-highcharts';
+import Highcharts from 'highcharts';
+
+import VueGraph from 'vue-graph'
+
+Vue.use(VueGraph)
+
+
 
 import App from './components/App.vue'
 const app =new Vue({
