@@ -49,4 +49,9 @@ class StocksController extends Controller
       return Favorites::get();
    }
 
+   public function removeFromFavorites(Request $request)
+   {
+      dd($request->all());
+   }
+
 }

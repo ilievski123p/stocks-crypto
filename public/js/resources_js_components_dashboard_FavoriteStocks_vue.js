@@ -69,6 +69,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -155,18 +160,12 @@ __webpack_require__.r(__webpack_exports__);
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
-    } // handleSearch()
-    // {
-    //   this.setTimeout(this.filter(),1500)
-    // },
-    // filter(row)
-    // {
-    //   if (row.name.contains(this.filter))
-    //     return true
-    //   else 
-    //     return false
-    // }
-
+    },
+    removeFromFavorites: function removeFromFavorites(data) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().delete('/removeFromFavorites', data).then(function (response) {
+        console.log(response.data);
+      });
+    }
   },
   computed: {
     rows: function rows() {
@@ -361,19 +360,21 @@ var render = function() {
               key: "cell(Full_Info)",
               fn: function(data) {
                 return [
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "text-primary underline hover:cursor-pointer",
-                      on: {
-                        click: function($event) {
-                          return _vm.openFullInfo(data)
+                  _c("div", [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "text-primary underline hover:cursor-pointer",
+                        on: {
+                          click: function($event) {
+                            return _vm.openFullInfo(data)
+                          }
                         }
-                      }
-                    },
-                    [_vm._v("\n              Open Full Info\n            ")]
-                  )
+                      },
+                      [_vm._v("\n              Open Full Info\n            ")]
+                    )
+                  ])
                 ]
               }
             }

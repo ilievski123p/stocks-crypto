@@ -144,7 +144,11 @@ var render = function() {
           _c(
             "b-card",
             { staticStyle: { "font-size": "14px", "font-weight": "bold" } },
-            [_vm._v("\n            Sorry, not available!\n        ")]
+            [
+              _vm._v(
+                "\n            Sorry, there aren't additional informations about this item!\n        "
+              )
+            ]
           )
         ],
         1

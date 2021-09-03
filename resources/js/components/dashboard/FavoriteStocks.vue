@@ -31,10 +31,15 @@
              {{ data.value }}
           </template>
 
-                   <template #cell(Full_Info)="data">
+          <template #cell(Full_Info)="data">
+            <div>
               <div class="text-primary underline hover:cursor-pointer" @click="openFullInfo(data)">
                 Open Full Info
               </div>
+              <!-- <div class="text-primary underline hover:cursor-pointer" @click="removeFromFavorites(data)">
+                Remove from favorites
+              </div> -->
+            </div>
           </template>
 
         </b-table>
@@ -146,19 +151,14 @@ export default {
         // Trigger pagination to update the number of buttons/pages due to filtering
         this.totalRows = filteredItems.length
         this.currentPage = 1
-      },
-      // handleSearch()
-      // {
-      //   this.setTimeout(this.filter(),1500)
-      // },
-      // filter(row)
-      // {
-      //   if (row.name.contains(this.filter))
-      //     return true
-      //   else 
-      //     return false
-      // }
     },
+    removeFromFavorites(data)
+    {
+      axios.delete('/removeFromFavorites', data).then(response => {
+        console.log(response.data)
+      })
+    }
+  },
     computed:{
       rows() {
         return this.items.length
